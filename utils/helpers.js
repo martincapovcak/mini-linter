@@ -38,7 +38,7 @@ const fixStarts = (str, arr) => {
     return newStr;
 };
 
-const usedWords = (words = []) => {
+const usedUniqueWords = (words = []) => {
     let bucket = {};
     let uniqueWords = [];
     for(const word of words){
@@ -59,5 +59,5 @@ export  {
     cleanBackslashN,
     fixEndings,
     fixStarts,
-    usedWords
+    usedUniqueWords
 }
