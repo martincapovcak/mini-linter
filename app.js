@@ -12,22 +12,24 @@ import {
 let overusedWords = ['really', 'very', 'basically'];
 let unnecessaryWords = ['extremely', 'literally', 'actually'];
 
+/*
 const storyWords = story.split(' ');
 
 const betterWords = storyWords.filter((word) => {
     return !unnecessaryWords.includes(word);
 });
+*/
 
-const countOverusedWords = (words=[]) => {
+const countSpecificWords = (words=[], specificWords = []) => {
     const cleaned = cleanWords(words);
     let bucket = {};
-    let overusedList = [];
+    let wordsList = [];
 
     for(const word of cleaned){
-        if(overusedWords.includes(word)){
-            if(!overusedList.includes(word)){
+        if(specificWords.includes(word)){
+            if(!wordsList.includes(word)){
                 bucket[word] = 1;
-                overusedList.push(word);
+                wordsList.push(word);
             } else {
                 bucket[word] = bucket[word] + 1;
             }
@@ -44,7 +46,6 @@ const countOverusedWords = (words=[]) => {
         });
     };
 
-    console.log(output)
     return output;
     //Returning array
 };
@@ -59,25 +60,30 @@ const countSentences = (story = '') => {
 };
 
 const cleanWords = (arr = []) => {
-    const glyphs = [".","!","?","\,",":","'",'"'];
     const cleaned = arr.map( word => {
-        let trimmedWord = word.trim();
-        trimmedWord = trimmedWord.replace('-','');
-
-        //Trimming out word endings characters
-        if(glyphs.includes(lastChar(trimmedWord))){
-            trimmedWord = fixEndings(trimmedWord, glyphs);
-            }
-
-        //Trimming out word beginning characters
-        if(glyphs.includes(firstChar(trimmedWord))){
-            trimmedWord = fixStarts(trimmedWord, glyphs);
-            }
-
+        let trimmedWord = cleanString(word);
         return trimmedWord.toLowerCase();
         }
     );
     return cleaned;
+};
+
+const cleanString = (str = '') => {
+    const glyphs = [".","!","?","\,",":","'",'"'];
+    let trimmedWord = str.trim();
+    trimmedWord = trimmedWord.replace('-','');
+
+    //Trimming out word endings characters
+    if(glyphs.includes(lastChar(trimmedWord))){
+        trimmedWord = fixEndings(trimmedWord, glyphs);
+        }
+
+    //Trimming out word beginning characters
+    if(glyphs.includes(firstChar(trimmedWord))){
+        trimmedWord = fixStarts(trimmedWord, glyphs);
+        }
+
+    return trimmedWord.toLowerCase();
 };
 
 const mostUsed = (words = []) => {
@@ -101,7 +107,41 @@ const mostUsed = (words = []) => {
     
 };
 
+const storyWords = (story = '') => {
+    let words = story.split(' ');
+    return words;
+};
 
-countOverusedWords(storyWords);
-mostUsed(storyWords);
-console.log(countSentences(storyWords));
+const carveOutWords = (words = [], unwantedWords = []) => {
+    let originalBucket = [];
+    let cleanedBucket = [];
+    let bucket = [];
+
+    words.forEach((word, index) => {
+        originalBucket.push({
+            word,
+            index
+        })
+    });
+
+    cleanedBucket = originalBucket.map((entry, index) => {
+        let trimmedWord = cleanString(entry.word);
+        return {
+            word: trimmedWord,
+            index
+        }
+    });
+
+    let unwantedLowerCased = unwantedWords.map(word => word.toLowerCase());
+
+    cleanedBucket.forEach((entry, index) => {
+        !unwantedLowerCased.includes(entry.word) && bucket.push(originalBucket[index].word)
+    });
+
+   return bucket;
+};
+
+let baseStoryWords = storyWords(story);
+//console.log(baseStoryWords.slice(0, 50).join(' '));
+
+console.log(carveOutWords(baseStoryWords.slice(0,50), unnecessaryWords).join(' '));
