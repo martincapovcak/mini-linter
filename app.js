@@ -5,7 +5,7 @@ import {
     firstChar, 
     fixEndings, 
     fixStarts, 
-    usedWords 
+    usedUniqueWords 
 } from './utils/helpers.js';
 
 
@@ -82,7 +82,7 @@ const cleanWords = (arr = []) => {
 
 const mostUsed = (words = []) => {
     const clean = cleanWords(words);
-    const bucket = usedWords(clean);
+    const bucket = usedUniqueWords(clean);
 
     let rank = 0;
     let mostUsed = {
