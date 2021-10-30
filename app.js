@@ -104,3 +104,4 @@ const mostUsed = (words = []) => {
 
 countOverusedWords(storyWords);
 mostUsed(storyWords);
+console.log(countSentences(storyWords));
