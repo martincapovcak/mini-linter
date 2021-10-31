@@ -103,13 +103,15 @@ const mostUsed = (words = []) => {
         }
     }
 
-    console.log(mostUsed);
-    
+    return mostUsed;
 };
 
 const storyWords = (story = '') => {
     let words = story.split(' ');
-    return words;
+    let trimmedWords = words.filter(word => {
+        return ![''].includes(word);
+    });
+    return trimmedWords;
 };
 
 const carveOutWords = (words = [], unwantedWords = []) => {
@@ -144,4 +146,6 @@ const carveOutWords = (words = [], unwantedWords = []) => {
 let baseStoryWords = storyWords(story);
 //console.log(baseStoryWords.slice(0, 50).join(' '));
 
-console.log(carveOutWords(baseStoryWords.slice(0,50), unnecessaryWords).join(' '));
+let adjustedStory = carveOutWords(baseStoryWords);
+console.log(adjustedStory.join(' '));
+console.log(mostUsed(adjustedStory));
